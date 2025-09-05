@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turtle WoW Zone Level Chart</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+        }
+        
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .faction-badge {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .alliance { background: #0084ff; }
+        .horde { background: #dc143c; }
+        .both { background: linear-gradient(45deg, #0084ff 50%, #dc143c 50%); }
+        .raid { background: #9932cc; }
+        
+        .table-container {
+            overflow-x: auto;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            padding: 12px 8px;
+            text-align: center;
+            font-weight: bold;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        th:first-child, th:nth-child(2) {
+            text-align: left;
+            min-width: 150px;
+        }
+        
+        th:nth-child(3) {
+            min-width: 60px;
+        }
+        
+        .level-header {
+            writing-mode: vertical-lr;
+            text-orientation: mixed;
+            font-size: 12px;
+            min-width: 35px;
+        }
+        
+        td {
+            padding: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            background: rgba(255, 255, 255, 0.02);
+        }
+        
+        td:first-child, td:nth-child(2) {
+            text-align: left;
+            font-weight: 500;
+        }
+        
+        .zone-name {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.05), transparent);
+        }
+        
+        .level-cell {
+            position: relative;
+        }
+        
+        .level-active {
+            background: #27ae60;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .level-active::before {
+            content: '●';
+            font-size: 16px;
+        }
+        
+        .faction-a { color: #5dade2; }
+        .faction-h { color: #ec7063; }
+        .faction-b { color: #f7dc6f; }
+        .faction-r { color: #bb8fce; }
+        
+        tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .section-header {
+            background: linear-gradient(135deg, #8e44ad, #3498db) !important;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .container { padding: 15px; }
+            h1 { font-size: 1.8em; }
+            table { font-size: 12px; }
+            th, td { padding: 6px 4px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🐢 Turtle WoW Zone Level Chart</h1>
+        
+        <div class="legend">
+            <div class="legend-item">
+                <div class="faction-badge alliance"></div>
+                <span>Alliance (A)</span>
+            </div>
+            <div class="legend-item">
+                <div class="faction-badge horde"></div>
+                <span>Horde (H)</span>
+            </div>
+            <div class="legend-item">
+                <div class="faction-badge both"></div>
+                <span>Both Factions (B)</span>
+            </div>
+            <div class="legend-item">
+                <div class="faction-badge raid"></div>
+                <span>Raid (R)</span>
+            </div>
+        </div>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Zone</th>
+                        <th>Continent</th>
+                        <th>Faction</th>
+                        <th class="level-header">1-5</th>
+                        <th class="level-header">5-10</th>
+                        <th class="level-header">10-15</th>
+                        <th class="level-header">15-20</th>
+                        <th class="level-header">20-25</th>
+                        <th class="level-header">25-30</th>
+                        <th class="level-header">30-35</th>
+                        <th class="level-header">35-40</th>
+                        <th class="level-header">40-45</th>
+                        <th class="level-header">45-50</th>
+                        <th class="level-header">50-55</th>
+                        <th class="level-header">55-60</th>
+                        <th class="level-header">60+</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Starting Areas (1-10) -->
+                    <tr><td class="zone-name">Dun Morogh</td><td>Eastern Kingdoms</td><td class="faction-a">A</td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td class="zone-name">Elwynn Forest</td><td>Eastern Kingdoms</td><td class="faction-a">A</td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td class="zone-name">Tirisfal Glades</td><td>Eastern Kingdoms</td><td class="faction-h">H</td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td class="zone-name">Durotar</td><td>Kalimdor</td><td class="faction-h">H</td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td class="zone-name">Mulgore</td><td>Kalimdor</td><td class="faction-h">H</td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td class="zone-name">Teldrassil</td><td>Kalimdor</td><td class="faction-a">A</td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    
+                    <!-- Low Level Areas (10-20) -->
+                    <tr><td class="zone-name">Loch Modan</td><td>Eastern Kingdoms</td><td class="faction-a">A</td><td></td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td class="zone-name">Westfall</td><td>Eastern Kingdoms</td><td class="faction-a">A</td><td></td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td class="zone-name">Silverpine Forest</td><td>Eastern Kingdoms</td><td class="faction-h">H</td><td></td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td class="zone-name">Redridge Mountains</td><td>Eastern Kingdoms</td><td class="faction-a">A</td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td class="zone-name">Darkshore</td><td>Kalimdor</td><td class="faction-a">A</td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    
+                    <!-- Mid Level Areas (15-35) -->
+                    <tr><td class="zone-name">Wetlands</td><td>Eastern Kingdoms</td><td class="faction-a">A</td><td></td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td class="zone-name">Duskwood</td><td>Eastern Kingdoms</td><td class="faction-a">A</td><td></td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td class="zone-name">The Barrens</td><td>Kalimdor</td><td class="faction-b">B</td><td></td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td class="zone-name">Hillsbrad Foothills</td><td>Eastern Kingdoms</td><td class="faction-b">B</td><td></td><td></td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td class="zone-name">Ashenvale</td><td>Kalimdor</td><td class="faction-b">B</td><td></td><td></td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td class="zone-name">Alterac Mountains</td><td>Eastern Kingdoms</td><td class="faction-b">B</td><td></td><td></td><td></td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td class="zone-name">Arathi Highlands</td><td>Eastern Kingdoms</td><td class="faction-b">B</td><td></td><td></td><td></td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td class="zone-name">Stonetalon Mountains</td><td>Kalimdor</td><td class="faction-b">B</td><td></td><td></td><td></td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td class="zone-name">Thousand Needles</td><td>Kalimdor</td><td class="faction-b">B</td><td></td><td></td><td></td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td class="zone-name">Stranglethorn Vale</td><td>Eastern Kingdoms</td><td class="faction-b">B</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td class="zone-name">Swamp of Sorrows</td><td>Eastern Kingdoms</td><td class="faction-b">B</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td class="zone-name">Desolace</td><td>Kalimdor</td><td class="faction-b">B</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td class="zone-name">Dustwallow Marsh</td><td>Kalimdor</td><td class="faction-b">B</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td class="zone-name">Gilneas</td><td>Eastern Kingdoms</td><td class="faction-b">B</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td><td></td><td></td><td></td></tr>
+                    
+                    <!-- High Level Areas (35-50) -->
+                    <tr><td class="zone-name">Badlands</td><td>Eastern Kingdoms</td><td class="faction-b">B</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td><td></td></tr>
+                    <tr><td class="zone-name">Blasted Lands</td><td>Eastern Kingdoms</td><td class="faction-b">B</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td><td></td></tr>
+                    <tr><td class="zone-name">Feralas</td><td>Kalimdor</td><td class="faction-b">B</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td><td></td></tr>
+                    <tr><td class="zone-name">Maraudon</td><td>Kalimdor</td><td class="faction-b">B</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td><td></td></tr>
+                    <tr><td class="zone-name">Tanaris</td><td>Kalimdor</td><td class="faction-b">B</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td><td></td></tr>
+                    <tr><td class="zone-name">Azshara</td><td>Kalimdor</td><td class="faction-b">B</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td></tr>
+                    <tr><td class="zone-name">Searing Gorge</td><td>Eastern Kingdoms</td><td class="faction-b">B</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td></tr>
+                    <tr><td class="zone-name">The Hinterlands</td><td>Eastern Kingdoms</td><td class="faction-b">B</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td></tr>
+                    <tr><td class="zone-name">Un'Goro Crater</td><td>Kalimdor</td><td class="faction-b">B</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td></tr>
+                    <tr><td class="zone-name">Felwood</td><td>Kalimdor</td><td class="faction-b">B</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td></tr>
+                    <tr><td class="zone-name">Blackrock Mountain</td><td>Eastern Kingdoms</td><td class="faction-b">B</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td></tr>
+                    <tr><td class="zone-name">Burning Steppes</td><td>Eastern Kingdoms</td><td class="faction-b">B</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td></tr>
+                    <tr><td class="zone-name">Gillijim's Isle</td><td>Eastern Kingdoms</td><td class="faction-b">B</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td></tr>
+                    <tr><td class="zone-name">Lapidis Isle</td><td>Eastern Kingdoms</td><td class="faction-b">B</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td></tr>
+                    <tr><td class="zone-name">Moonglade</td><td>Kalimdor</td><td class="faction-b">B</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td></tr>
+                    <tr><td class="zone-name">Winterspring</td><td>Kalimdor</td><td class="faction-b">B</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td></tr>
+                    <tr><td class="zone-name">Tel'Abim</td><td>Kalimdor</td><td class="faction-b">B</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td></tr>
+                    
+                    <!-- End Game Areas (55-60+) -->
+                    <tr><td class="zone-name">Deadwind Pass</td><td>Eastern Kingdoms</td><td class="faction-b">B</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td></tr>
+                    <tr><td class="zone-name">Eastern Plaguelands</td><td>Eastern Kingdoms</td><td class="faction-b">B</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td></tr>
+                    <tr><td class="zone-name">Western Plaguelands</td><td>Eastern Kingdoms</td><td class="faction-b">B</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td></tr>
+                    <tr><td class="zone-name">Hyjal</td><td>Kalimdor</td><td class="faction-b">B</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td></tr>
+                    
+                    <!-- Dungeons & Instances (by level) -->
+                    <tr class="section-header"><td colspan="16">🏛️ Dungeons & Instances</td></tr>
+                    <tr><td class="zone-name">Ragefire Chasm</td><td>Instances</td><td class="faction-h">H</td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td class="zone-name">The Deadmines</td><td>Instances</td><td class="faction-a">A</td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td class="zone-name">Wailing Caverns</td><td>Instances</td><td class="faction-b">B</td><td></td><td></td><td></td><td class="level-active">●</td><td class="level-active">●</td><td class="level-active">●</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    <tr><td class="zone-name">Blackfathom Deeps</td><td>Instances</td><td class="faction-b">B</td><td></td><td></td><td></td><td></td><td class="level-
